@@ -14,26 +14,45 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = void 0;
 const customer_controller_1 = __importDefault(require("../controllers/customer.controller"));
+const order_controller_1 = __importDefault(require("../controllers/order.controller"));
 const product_controller_1 = __importDefault(require("../controllers/product.controller"));
+const customer_model_1 = require("../models/customer.model");
+const order_model_1 = require("../models/order.model");
+const product_model_1 = require("../models/product.model");
 // Finish the resolvers
 exports.resolvers = {
     Query: {
         products: () => __awaiter(void 0, void 0, void 0, function* () { return yield product_controller_1.default.getProducts(); }),
         customers: () => __awaiter(void 0, void 0, void 0, function* () { return yield customer_controller_1.default.getCustomers(); }),
-        // orders: () => {},
+        orders: () => __awaiter(void 0, void 0, void 0, function* () { return yield order_controller_1.default.getOrders(); }),
         getProductById: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) { return yield product_controller_1.default.getProductById(id); }),
         getCustomerById: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) { return yield customer_controller_1.default.getCustomerById(id); }),
+        getOrderById: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) { return yield order_controller_1.default.getOrderById(id); }),
     },
-    // Product: {
-    //   customers: () => {}
-    // },
-    // Customer: {
-    //   products: () => {}
-    // },
-    // Order: {
-    //   product: () => {},
-    //   customer: () => {}
-    // },
+    Product: {
+        customers: (parent) => __awaiter(void 0, void 0, void 0, function* () {
+            const orders = yield order_model_1.Order.find({ productId: parent.id });
+            const customers = orders.map((order) => __awaiter(void 0, void 0, void 0, function* () {
+                const customer = yield customer_model_1.Customer.findById(order.customerId);
+                return customer;
+            }));
+            return customers;
+        }),
+    },
+    Customer: {
+        products: (parent) => __awaiter(void 0, void 0, void 0, function* () {
+            const orders = yield order_model_1.Order.find({ customerId: parent.id });
+            const products = orders.map((order) => __awaiter(void 0, void 0, void 0, function* () {
+                const product = yield product_model_1.Product.findById(order.productId);
+                return product;
+            }));
+            return products;
+        }),
+    },
+    Order: {
+        product: (parent) => __awaiter(void 0, void 0, void 0, function* () { return yield product_controller_1.default.getProductById(parent.productId); }),
+        customer: (parent) => __awaiter(void 0, void 0, void 0, function* () { return yield customer_controller_1.default.getCustomerById(parent.customerId); }),
+    },
     Mutation: {
         addProduct: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { productName, productPrice }) { return yield product_controller_1.default.createProduct({ productName, productPrice }); }),
         editProduct: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id, productName, productPrice }) { return yield product_controller_1.default.updateProduct(id, { productName, productPrice }); }),
@@ -47,8 +66,8 @@ exports.resolvers = {
             });
         }),
         removeCustomer: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) { return yield customer_controller_1.default.deleteCustomer(id); }),
-        // addOrder: () => {},
-        // editOrder: () => {},
+        addOrder: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { productId, customerId }) { return yield order_controller_1.default.createOrder({ productId, customerId }); }),
+        editOrder: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id, productId, customerId }) { return yield order_controller_1.default.updateOrder(id, { productId, customerId }); }),
         // removeOrder: () => {}
     },
 };

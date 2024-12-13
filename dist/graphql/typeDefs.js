@@ -7,7 +7,7 @@ exports.typeDefs = (0, graphql_tag_1.gql) `
     id: ID!,
     productName: String,
     productPrice: Float,
-    # customers: [Customer] # Product's customers
+    customers: [Customer] # Product's customers
   }
 
   type Customer {
@@ -15,16 +15,22 @@ exports.typeDefs = (0, graphql_tag_1.gql) `
     firstName: String,
     lastName: String,
     email: String,
-    # products: [Product] # Customer's products
+    products: [Product] # Customer's products
   }
   
+  type Order {
+    id: ID!,
+    product: Product, # Product details
+    customer: Customer # Customer details
+  }
 
   type Query {
     products: [Product],
     customers: [Customer],
-    # orders: [Order],
+    orders: [Order],
     getProductById(id: ID): Product,
     getCustomerById(id: ID): Customer,
+    getOrderById(id: ID): Order,
   }
 
   type Mutation {
@@ -36,8 +42,8 @@ exports.typeDefs = (0, graphql_tag_1.gql) `
     editCustomer(id: ID, firstName: String, lastName: String, email: String): Customer,
     removeCustomer(id: ID): Boolean,
     
-    # addOrder(productId: ID, customerId: ID): Order,
-    # editOrder(id: ID, productId: ID, customerId: ID): Order,
+    addOrder(productId: ID, customerId: ID): Order,
+    editOrder(id: ID, productId: ID, customerId: ID): Order,
     # removeOrder(id: ID): Boolean
   }
 
