@@ -28,6 +28,7 @@ export const typeDefs = gql`
     orders: [Order],
     getProductById(id: ID): Product,
     getCustomerById(id: ID): Customer,
+    getOrderById(id: ID): Order,
   }
 
   type Mutation {
@@ -41,6 +42,8 @@ export const typeDefs = gql`
     
     addOrder(productId: ID, customerId: ID): Order,
     editOrder(id: ID, productId: ID, customerId: ID): Order,
-    removeOrder(id: ID): Boolean
+    # removeOrder(id: ID): Boolean
   }
+
+
 `
