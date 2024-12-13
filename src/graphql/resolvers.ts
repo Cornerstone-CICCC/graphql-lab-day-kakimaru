@@ -1,33 +1,45 @@
+import productController from "../controllers/product.controller";
+import { IProduct } from "../types/product";
+
 // Finish the resolvers
 export const resolvers = {
   Query: {
-    products: () => {},
-    customers: () => {},
-    orders: () => {},
-    getProductById: () => {},
-    getCustomerById: () => {},
+    products: async () => await productController.getProducts(),
+    // customers: () => {},
+    // orders: () => {},
+    getProductById: async (_: unknown, { id }: { id: string }) =>
+      await productController.getProductById(id),
+    // getCustomerById: () => {},
   },
-  Product: {
-    customers: () => {}
-  },
-  Customer: {
-    products: () => {}
-  },
-  Order: {
-    product: () => {},
-    customer: () => {}
-  },
+  // Product: {
+  //   customers: () => {}
+  // },
+  // Customer: {
+  //   products: () => {}
+  // },
+  // Order: {
+  //   product: () => {},
+  //   customer: () => {}
+  // },
   Mutation: {
-    addProduct: () => {},
-    editProduct: () => {},
-    removeProduct: () => {},
+    addProduct: async (
+      _: unknown,
+      { productName, productPrice }: Omit<IProduct, "id">
+    ) => await productController.createProduct({ productName, productPrice }),
+    editProduct: async (
+      _: unknown,
+      { id, productName, productPrice }: IProduct
+    ) =>
+      await productController.updateProduct(id, { productName, productPrice }),
+    removeProduct: async (_: unknown, { id }: { id: string }) =>
+      await productController.deleteProduct(id),
 
-    addCustomer: () => {},
-    editCustomer: () => {},
-    removeCustomer: () => {},
+    // addCustomer: () => {},
+    // editCustomer: () => {},
+    // removeCustomer: () => {},
 
-    addOrder: () => {},
-    editOrder: () => {},
-    removeOrder: () => {}
-  }
-}
+    // addOrder: () => {},
+    // editOrder: () => {},
+    // removeOrder: () => {}
+  },
+};
