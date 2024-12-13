@@ -13,15 +13,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.resolvers = void 0;
+const customer_controller_1 = __importDefault(require("../controllers/customer.controller"));
 const product_controller_1 = __importDefault(require("../controllers/product.controller"));
 // Finish the resolvers
 exports.resolvers = {
     Query: {
         products: () => __awaiter(void 0, void 0, void 0, function* () { return yield product_controller_1.default.getProducts(); }),
-        // customers: () => {},
+        customers: () => __awaiter(void 0, void 0, void 0, function* () { return yield customer_controller_1.default.getCustomers(); }),
         // orders: () => {},
         getProductById: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) { return yield product_controller_1.default.getProductById(id); }),
-        // getCustomerById: () => {},
+        getCustomerById: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) { return yield customer_controller_1.default.getCustomerById(id); }),
     },
     // Product: {
     //   customers: () => {}
@@ -37,9 +38,15 @@ exports.resolvers = {
         addProduct: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { productName, productPrice }) { return yield product_controller_1.default.createProduct({ productName, productPrice }); }),
         editProduct: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id, productName, productPrice }) { return yield product_controller_1.default.updateProduct(id, { productName, productPrice }); }),
         removeProduct: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) { return yield product_controller_1.default.deleteProduct(id); }),
-        // addCustomer: () => {},
-        // editCustomer: () => {},
-        // removeCustomer: () => {},
+        addCustomer: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { firstName, lastName, email }) { return yield customer_controller_1.default.createCustomer({ firstName, lastName, email }); }),
+        editCustomer: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id, firstName, lastName, email }) {
+            return yield customer_controller_1.default.updateCustomer(id, {
+                firstName,
+                lastName,
+                email,
+            });
+        }),
+        removeCustomer: (_1, _a) => __awaiter(void 0, [_1, _a], void 0, function* (_, { id }) { return yield customer_controller_1.default.deleteCustomer(id); }),
         // addOrder: () => {},
         // editOrder: () => {},
         // removeOrder: () => {}

@@ -1,15 +1,18 @@
+import customerController from "../controllers/customer.controller";
 import productController from "../controllers/product.controller";
+import { ICustomer } from "../types/customer";
 import { IProduct } from "../types/product";
 
 // Finish the resolvers
 export const resolvers = {
   Query: {
     products: async () => await productController.getProducts(),
-    // customers: () => {},
+    customers: async () => await customerController.getCustomers(),
     // orders: () => {},
     getProductById: async (_: unknown, { id }: { id: string }) =>
       await productController.getProductById(id),
-    // getCustomerById: () => {},
+    getCustomerById: async (_: unknown, { id }: { id: string }) =>
+      await customerController.getCustomerById(id),
   },
   // Product: {
   //   customers: () => {}
@@ -34,9 +37,22 @@ export const resolvers = {
     removeProduct: async (_: unknown, { id }: { id: string }) =>
       await productController.deleteProduct(id),
 
-    // addCustomer: () => {},
-    // editCustomer: () => {},
-    // removeCustomer: () => {},
+    addCustomer: async (
+      _: unknown,
+      { firstName, lastName, email }: Omit<ICustomer, "id">
+    ) =>
+      await customerController.createCustomer({ firstName, lastName, email }),
+    editCustomer: async (
+      _: unknown,
+      { id, firstName, lastName, email }: ICustomer
+    ) =>
+      await customerController.updateCustomer(id, {
+        firstName,
+        lastName,
+        email,
+      }),
+    removeCustomer: async (_: unknown, { id }: { id: string }) =>
+      await customerController.deleteCustomer(id),
 
     // addOrder: () => {},
     // editOrder: () => {},
